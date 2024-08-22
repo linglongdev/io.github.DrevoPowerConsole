@@ -1,0 +1,63 @@
+From fbce0148425c92e49b794684eda23dad7fc416c8 Mon Sep 17 00:00:00 2001
+From: wjyrich <1071633242@qq.com>
+Date: Wed, 14 Aug 2024 19:42:40 +0800
+Subject: [PATCH] install
+
+---
+ DrevoPowerConsole.desktop | 11 +++++++++++
+ DrevoPowerConsole.pro     | 12 ++++++++++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+ create mode 100644 DrevoPowerConsole.desktop
+
+diff --git a/DrevoPowerConsole.desktop b/DrevoPowerConsole.desktop
+new file mode 100644
+index 0000000..576615b
+--- /dev/null
++++ b/DrevoPowerConsole.desktop
+@@ -0,0 +1,11 @@
++[Desktop Entry]
++Categories=Accessibility;Qt;Utility;
++Exec=DrevoPowerConsole
++Name=DrevoPowerConsole
++Name[zh_CN]=DrevoPowerConsole
++Icon=icon_custom_linux
++StartupNotify=false
++Terminal=false
++Type=Application
++GenericName=DrevoPowerConsole
++Version=1.0
+\ No newline at end of file
+diff --git a/DrevoPowerConsole.pro b/DrevoPowerConsole.pro
+index 31b5f7e..de8b9b6 100644
+--- a/DrevoPowerConsole.pro
++++ b/DrevoPowerConsole.pro
+@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+ 
+ TARGET = DrevoPowerConsole
+ TEMPLATE = app
+-
++INCLUDEPATH += $$PREFIX/include
+ # The following define makes your compiler emit warnings if you use
+ # any feature of Qt which as been marked as deprecated (the exact warnings
+ # depend on your compiler). Please consult the documentation of the
+@@ -61,7 +61,15 @@ FORMS += \
+ RESOURCES += \
+     keyboard_layout.qrc
+ 
+-LIBS += -L"usr/local/lib" -lusb-1.0
++LIBS += -L$$PREFIX/lib/x86_64-linux-gnu -lusb-1.0
+ LIBS += -L"./lib/" -lhidkeyboard
+ 
+ DISTFILES +=
++
++target.path = $$PREFIX/bin
++desktop.files = DrevoPowerConsole.desktop
++desktop.path = $$PREFIX/share/applications/
++icons.path = $$PREFIX/share/icons
++icons.files = image/icon/icon_custom_linux.png
++
++INSTALLS += target desktop icons
+\ No newline at end of file
+-- 
+2.43.4
+
