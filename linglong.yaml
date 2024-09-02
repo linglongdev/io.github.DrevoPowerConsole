@@ -1,0 +1,46 @@
+version: "1"
+
+package:
+  id: io.github.DrevoPowerConsole
+  name: DrevoPowerConsole
+  version: 0.0.0.1
+  kind: app
+  description: |
+    DREVO Power Console Linux
+
+command:
+  - /opt/apps/io.github.DrevoPowerConsole/files/bin/DrevoPowerConsole
+
+base: org.deepin.foundation/23.0.0
+runtime: org.deepin.Runtime/23.0.1
+
+sources:
+  - kind: git
+    url: https://github.com/kakaZzzz/dpc_linux.git
+    version: master
+    commit: 4e80fdd3e6a2b47cec94b06cf4bb702d192e8677
+  - kind: git
+    url: https://github.com/libusb/libusb-cmake.git
+    version: master
+    commit: 8f0b4a38fc3eefa2b26a99dff89e1c12bf37afd4
+
+  - kind: file
+    url: http://ftp.cn.debian.org/debian/pool/main/libu/libusb-1.0/libusb-1.0-0-dev_1.0.22-2_amd64.deb
+    digest: 0c5bc545ab92ae00274f3b33fdadfa895024877884abaaa86380846669252429
+
+  - kind: file
+    url: http://ftp.cn.debian.org/debian/pool/main/libu/libusb-1.0/libusb-1.0-0_1.0.22-2_amd64.deb
+    digest: 37be9e682f0fd7533b7bb9d91af802a5070ad68eb9434036af5bc2815efb2615
+build: |
+  bash ./install_dep linglong/sources $PREFIX
+  cd /project/linglong/sources/libusb-cmake.git
+  mkdir build
+  cd build
+  cmake .. \
+        -DCMAKE_INSTALL_PREFIX=${PREFIX}
+  cmake --build . --target install -j$(nproc --all)
+  cd /project/linglong/sources/dpc_linux.git
+  git apply ../../../0001-install.patch
+  qmake -makefile PREFIX=${PREFIX} LIB_INSTALL_DIR=${PREFIX}/lib/${TRIPLET}
+  make -j$(nproc)
+  make install
